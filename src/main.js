@@ -7,7 +7,7 @@ import './views/route-list-view.js';
 import AppModel from './models/app-model.js';
 
 const appModel = new AppModel();
-//console.log(appModel.getPoints());
+console.log(appModel.getOffersGroup());
 /**
  * @type {BriefView}
  */

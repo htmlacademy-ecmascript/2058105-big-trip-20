@@ -17,10 +17,41 @@ class AppModel extends Model {
   }
 
   /**
-   * return (Array<Point>)
+   * return {Array<Point>}
    */
   getPoints () {
-    return this.#points;
+    return this.#points.map(AppModel.adaptPointForUser);
+  }
+
+  /**
+   * return {Array<Destination>}
+   */
+  getDestinations () {
+    return structuredClone(this.#destinations);
+  }
+
+  /**
+   * return {Array<OfferGroup>}
+   */
+  getOffersGroup () {
+    return structuredClone(this.#offerGroups);
+  }
+
+  /**
+   * @param {PointInSnakeCase} point
+   * @return {Point}
+   */
+  static adaptPointForUser(point) {
+    return {
+      id: point.id,
+      type: point.type,
+      destinationId: point.destination,
+      startDateTime: point.date_from,
+      endDateTime: point.date_to,
+      basePrice: point.base_price,
+      offerIds: point.offers,
+      isFavorite: point.is_favorite
+    };
   }
 }
 
