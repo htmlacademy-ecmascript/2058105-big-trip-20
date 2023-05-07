@@ -841,3 +841,7 @@ main {
   margin-bottom: 54px;
   margin-left: auto;
 }
+
+.event__type-list {
+  text-transform: capitalize;
+}
