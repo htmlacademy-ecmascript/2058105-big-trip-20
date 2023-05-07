@@ -12,7 +12,7 @@ class RouteListPresenter extends Presenter {
   createViewState() {
     const points = this.model.getPoints();
     const items = points.map(this.createPointViewState, this);
-    console.log(items[0]);
+    //console.log(items[0]);
     return {items};
   }
 
@@ -51,7 +51,7 @@ class RouteListPresenter extends Presenter {
       basePrice: point.basePrice,
       offers,
       isFavorite: point.isFavorite,
-      isEditable: index === 0
+      isEditable: index === 9
     };
   }
 }
