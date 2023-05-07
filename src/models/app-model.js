@@ -33,7 +33,7 @@ class AppModel extends Model {
   /**
    * return {Array<OfferGroup>}
    */
-  getOffersGroup () {
+  getOffersGroups () {
     return structuredClone(this.#offerGroups);
   }
 

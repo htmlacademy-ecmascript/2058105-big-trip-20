@@ -1,6 +1,9 @@
 import View from './view.js';
 import {html} from '../utils.js';
 
+/**
+ * @extends {View<PointViewState>}
+ */
 class CardView extends View {
 
   /**
@@ -25,8 +28,10 @@ class CardView extends View {
    * @return {SafeHtml}
    */
   createStartDateHtml() {
+    const point = this.state;
+
     return html`
-      <time class="event__date" datetime="2019-03-18">MAR 18</time>
+      <time class="event__date" datetime="${point.startDateTime}">${point.startDate}</time>
     `;
   }
 
@@ -34,9 +39,12 @@ class CardView extends View {
    * @return {SafeHtml}
    */
   createTypeIconHtml() {
+    const point = this.state;
+    const typeIcon = point.types.find((it) => it.isSelected);
+
     return html`
       <div class="event__type">
-        <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
+        <img class="event__type-icon" width="42" height="42" src="img/icons/${typeIcon.value}.png" alt="Event type icon">
       </div>
     `;
   }
@@ -45,8 +53,12 @@ class CardView extends View {
    * @return {SafeHtml}
    */
   createDestinationHtml() {
+    const point = this.state;
+    const typeDestination = point.types.find((it) => it.isSelected);
+    const destination = point.destinations.find((it) => it.isSelected);
+
     return html`
-      <h3 class="event__title">Taxi Amsterdam</h3>
+      <h3 class="event__title">${typeDestination.value} ${destination.name}</h3>
     `;
   }
 
@@ -81,14 +93,23 @@ class CardView extends View {
    * @return {SafeHtml}
    */
   createOffersHtml() {
+    const point = this.state;
+    const offers = point.offers.filter((it) => it.isSelected);
+
+    if(!offers.length) {
+      return '';
+    }
+
     return html`
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
+      ${offers.map((it) => html`
       <li class="event__offer">
-        <span class="event__offer-title">Order Uber</span>
+        <span class="event__offer-title">${it.title}</span>
         +€&nbsp;
-        <span class="event__offer-price">20</span>
+        <span class="event__offer-price">${it.price}</span>
       </li>
+      `)}
     </ul>
     `;
   }

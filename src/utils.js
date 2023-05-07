@@ -1,4 +1,36 @@
+import dayjs from 'dayjs';
+import durationPlugin from 'dayjs/plugin/duration.js';
 import {escape as escapeHtml} from 'he';
+
+dayjs.extend(durationPlugin);
+
+/**
+ *
+ * @param {string} date
+ * @return {string}
+ */
+function formatDate(dateTime) {
+  return dayjs(dateTime).format('MMM D');
+}
+
+/**
+ *
+ * @param {string} date
+ * @return {string}
+ */
+function formatTime(dateTime) {
+  return dayjs(dateTime).format('HH:mm');
+}
+
+/**
+ * @param {string} startDateTime
+ * @param {string} endDateTime
+ * @return {string}
+ */
+function formatDuration(startDateTime, endDateTime) {
+  const ms = dayjs(endDateTime).diff(startDateTime);
+  return dayjs.duration(ms).format('HH[h] mm[m]');
+}
 
 class SafeHtml extends String {}
 
@@ -8,7 +40,6 @@ class SafeHtml extends String {}
  * @return {SafeHtml}
  */
 //тег для шаблонных строк
-
 function html(strings, ...values) {
   const result = strings.reduce((before, after, index) => {
     const value = values[index - 1];
@@ -27,4 +58,4 @@ function html(strings, ...values) {
   return new SafeHtml(result);
 }
 
-export {SafeHtml, html};
+export {formatDate, formatTime, formatDuration, SafeHtml, html};
