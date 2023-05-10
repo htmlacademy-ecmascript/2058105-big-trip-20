@@ -12,7 +12,6 @@ class RouteListPresenter extends Presenter {
   createViewState() {
     const points = this.model.getPoints();
     const items = points.map(this.createPointViewState, this);
-    //console.log(items[0]);
     return {items};
   }
 
@@ -38,6 +37,11 @@ class RouteListPresenter extends Presenter {
       isSelected: point.offerIds.includes(it.id)
     }));
 
+    /**
+       * @type {UrlParams}
+       */
+    const urlParams = this.getUrlParams();
+
     return {
       id: point.id,
       types,
@@ -51,8 +55,37 @@ class RouteListPresenter extends Presenter {
       basePrice: point.basePrice,
       offers,
       isFavorite: point.isFavorite,
-      isEditable: index === 9
+      isEditable: point.id === urlParams.edit
     };
+  }
+
+  /**
+   * @override
+   */
+  addEventListeners() {
+    /**
+     * @param {CustomEvent & {target: CardView}} event
+     */
+    const handleOpenView = (event) => {
+      /**
+       * @type {UrlParams}
+       */
+      const urlParams = this.getUrlParams();
+      urlParams.edit = event.target.state.id;
+      this.setUrlParams(urlParams);
+    };
+
+    const handleCloseView = () => {
+      /**
+       * @type {UrlParams}
+       */
+      const urlParams = this.getUrlParams();
+      delete urlParams.edit;
+      this.setUrlParams(urlParams);
+    };
+
+    this.view.addEventListener('open', handleOpenView);
+    this.view.addEventListener('close', handleCloseView);
   }
 }
 

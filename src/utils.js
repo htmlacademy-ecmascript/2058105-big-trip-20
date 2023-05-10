@@ -6,7 +6,7 @@ dayjs.extend(durationPlugin);
 
 /**
  *
- * @param {string} date
+ * @param {string} dateTime
  * @return {string}
  */
 function formatDate(dateTime) {
@@ -15,7 +15,7 @@ function formatDate(dateTime) {
 
 /**
  *
- * @param {string} date
+ * @param {string} dateTime
  * @return {string}
  */
 function formatTime(dateTime) {
