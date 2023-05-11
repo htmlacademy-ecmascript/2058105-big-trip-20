@@ -19,7 +19,7 @@ class RouteListPresenter extends Presenter {
    * @param {Point} point
    * @return {PointViewState}
    */
-  createPointViewState(point, index) {
+  createPointViewState(point) {
     const offerGroups = this.model.getOffersGroups();
     const types = offerGroups.map((it) => ({
       value: it.type,

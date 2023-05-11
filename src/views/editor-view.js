@@ -3,6 +3,7 @@ import {html} from '../utils.js';
 
 /**
  * @extends {View<PointViewState>}
+ * @implements {EventListenerObject} объект сам выступает в качестве об.событий, сохраняя контекст
  */
 class EditorView extends View {
   constructor() {
@@ -11,11 +12,29 @@ class EditorView extends View {
     this.addEventListener('click', this.handleClick);
   }
 
+  connectedCallback() {
+    document.addEventListener('keydown', this);
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener('keydown', this);
+  }
+
   /**
    * @param {MouseEvent & {target: Element}} event
    */
   handleClick(event) {
     if(event.target.closest('.event__rollup-btn')) {
+      this.notify('close');
+    }
+  }
+
+  /**
+   * @param {KeyboardEvent} event
+   */
+
+  handleEvent(event) {
+    if(event.key === 'Escape') {
       this.notify('close');
     }
   }
