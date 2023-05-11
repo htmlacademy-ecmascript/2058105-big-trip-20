@@ -35,6 +35,11 @@
  */
 
 /**
+ * @typedef UrlParams
+ * @prop {string} [edit]
+ */
+
+/**
  * @typedef {import('./models/app-model.js').default} AppModel
  * @typedef {import('./models/model.js').default} Model
  */
