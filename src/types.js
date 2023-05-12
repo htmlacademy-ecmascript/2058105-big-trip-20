@@ -13,6 +13,34 @@
 */
 
 /**
+ * @typedef BriefViewState
+ * @prop {string} places
+ * @prop {string} dates
+ * @prop {string} cost
+ */
+
+/**
+ * @typedef AddViewState
+ * @prop {boolean} isDisabled
+ */
+
+/**
+ * @typedef FilterViewState
+ * @prop {Array<FilterItemViewState>} items
+ */
+
+/**
+ * @typedef FilterItemViewState
+ * @prop {FilterType} filter
+ * @prop {boolean} isSelected
+ * @prop {boolean} isDisabled
+ */
+
+/**
+ * @typedef {'everything' | 'future' | 'present' | 'past'} FilterType
+ */
+
+/**
  * @typedef RouteListViewState
  * @prop {Array<PointViewState>} items
  */
