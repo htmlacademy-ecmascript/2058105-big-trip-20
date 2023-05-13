@@ -31,13 +31,29 @@
 
 /**
  * @typedef FilterItemViewState
- * @prop {FilterType} filter
+ * @prop {FilterType} value
  * @prop {boolean} isSelected
  * @prop {boolean} isDisabled
  */
 
 /**
  * @typedef {'everything' | 'future' | 'present' | 'past'} FilterType
+ */
+
+/**
+ * @typedef SortViewState
+ * @prop {Array<SortItemViewState>} items
+ */
+
+/**
+ * @typedef SortItemViewState
+ * @prop {SortType} value
+ * @prop {boolean} isSelected
+ * @prop {boolean} isDisabled
+ */
+
+/**
+ * @typedef {'day' | 'event' | 'time' | 'price' | 'offers'} SortType
  */
 
 /**
