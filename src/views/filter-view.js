@@ -1,6 +1,9 @@
 import View from './view.js';
 import {html} from '../utils.js';
 
+/**
+ * @extends {View<FilterViewState>}
+ */
 class FilterView extends View {
   constructor() {
     super();
@@ -13,25 +16,20 @@ class FilterView extends View {
    */
   createHtml() {
     return html`
-    <div class="trip-filters__filter">
-      <input id="filter-everything" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="everything" checked="">
-      <label class="trip-filters__filter-label" for="filter-everything">Everything</label>
-    </div>
+      ${this.state.items.map(this.createItemHtml)}
+    `;
+  }
 
-    <div class="trip-filters__filter">
-      <input id="filter-future" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="future">
-      <label class="trip-filters__filter-label" for="filter-future">Future</label>
-    </div>
-
-    <div class="trip-filters__filter">
-      <input id="filter-present" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="present">
-      <label class="trip-filters__filter-label" for="filter-present">Present</label>
-    </div>
-
-    <div class="trip-filters__filter">
-      <input id="filter-past" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="past">
-      <label class="trip-filters__filter-label" for="filter-past">Past</label>
-    </div>
+  /**
+   * @param {FilterItemViewState} state
+   * @return {SafeHtml}
+   */
+  createItemHtml(state) {
+    return html`
+      <div class="trip-filters__filter">
+        <input ${state.isSelected ? 'checked' : ''} ${state.isDisabled ? 'disabled' : ''} id="filter-${state.value}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${state.value}">
+        <label class="trip-filters__filter-label" for="filter-${state.value}">${state.value}</label>
+      </div>
     `;
   }
 }
