@@ -84,8 +84,19 @@ class RouteListPresenter extends Presenter {
       this.setUrlParams(urlParams);
     };
 
+    /**
+     * @param {CustomEvent & {target: CardView}} event
+     */
+    const handleFavoriteView = (event) => {
+      const card = event.target;
+      const point = card.state;
+      point.isFavorite = !point.isFavorite;//инверсия, поменяет булево значение на противоположное
+      card.render();
+    };
+
     this.view.addEventListener('open', handleOpenView);
     this.view.addEventListener('close', handleCloseView);
+    this.view.addEventListener('favorite', handleFavoriteView);
   }
 }
 

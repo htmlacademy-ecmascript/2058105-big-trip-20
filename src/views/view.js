@@ -23,7 +23,7 @@ class View extends HTMLElement {
     return null;
   }
 
-  /**
+  /** dispatchEvent возвращает булево значение, в зависимости от того был ли передан evt.preventDefault или нет,т.е. был ли вызван каким то обработчиком этот метод. И мы передаем ему аргументом событие.  Это паттерн наблюдатель
    * @param {string} type
    * @param {any} [detail]
    * @return {boolean}
