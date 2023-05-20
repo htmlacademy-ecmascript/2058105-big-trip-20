@@ -5,7 +5,6 @@ import {escape as escapeHtml} from 'he';
 dayjs.extend(durationPlugin);
 
 /**
- *
  * @param {string} dateTime
  * @return {string}
  */
@@ -14,7 +13,6 @@ function formatDate(dateTime) {
 }
 
 /**
- *
  * @param {string} dateTime
  * @return {string}
  */
@@ -29,7 +27,16 @@ function formatTime(dateTime) {
  */
 function formatDuration(startDateTime, endDateTime) {
   const ms = dayjs(endDateTime).diff(startDateTime);
-  return dayjs.duration(ms).format('HH[h] mm[m]');
+  const duration = dayjs.duration(ms);
+
+  if (duration.days()) {
+    return duration.format('DD[d] HH[h] mm[m]');
+  }
+
+  if (duration.hours()) {
+    return duration.format('HH[h] mm[m]');
+  }
+  return duration.format('mm[m]');
 }
 
 class SafeHtml extends String {}
