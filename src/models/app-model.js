@@ -4,37 +4,53 @@ import offerGroups from '../data/offers.json';
 import destinations from '../data/destinations.json';
 
 class AppModel extends Model {
-  #points;
-  #offerGroups;
-  #destinations;
-
-  constructor() {
-    super();
-
-    this.#points = points;
-    this.#offerGroups = offerGroups;
-    this.#destinations = destinations;
-  }
+  #points = points;
+  #offerGroups = offerGroups;
+  #destinations = destinations;
 
   /**
-   * return {Array<Point>}
+   * @type {Record<SortType, (a : Point, b : Point) => number>}
    */
-  getPoints () {
-    return this.#points.map(AppModel.adaptPointForUser);
+  #sortCallbackMap = {
+    //Date.parse переводит строку в формате изл в мс
+    day: (a, b) => Date.parse(a.startDateTime) - Date.parse(b.startDateTime),
+    event: () => 0,
+    time: (a, b) => AppModel.calcPointDuration(b) - AppModel.calcPointDuration(a),
+    price: (a, b) => a.basePrice - b.basePrice,
+    offers: () => 0
+  };
+
+  /**
+   * @param {{sort?: SortType}} [criteria]
+   * @return {Array<Point>}
+   */
+  getPoints (criteria = {}) {
+    const adaptedPoints = this.#points.map(AppModel.adaptPointForUser);
+    const sortCallback = this.#sortCallbackMap[criteria.sort] ?? this.#sortCallbackMap.day;
+    return adaptedPoints.sort(sortCallback);
   }
 
   /**
-   * return {Array<Destination>}
+   * @return {Array<Destination>}
    */
   getDestinations () {
     return structuredClone(this.#destinations);
   }
 
   /**
-   * return {Array<OfferGroup>}
+   * @return {Array<OfferGroup>}
    */
   getOffersGroups () {
+    // @ts-ignore
     return structuredClone(this.#offerGroups);
+  }
+
+  /**
+   * @param {Point} point
+   * @return {number}
+   */
+  static calcPointDuration (point) {
+    return Date.parse(point.endDateTime) - Date.parse(point.startDateTime);
   }
 
   /**

@@ -10,7 +10,12 @@ class RouteListPresenter extends Presenter {
    * @return {RouteListViewState}
    */
   createViewState() {
-    const points = this.model.getPoints();
+    /**
+     * @type {UrlParams}
+     */
+    const urlParams = this.getUrlParams();
+
+    const points = this.model.getPoints(urlParams);
     const items = points.map(this.createPointViewState, this);
     return {items};
   }
@@ -38,8 +43,8 @@ class RouteListPresenter extends Presenter {
     }));
 
     /**
-       * @type {UrlParams}
-       */
+     * @type {UrlParams}
+     */
     const urlParams = this.getUrlParams();
 
     return {
