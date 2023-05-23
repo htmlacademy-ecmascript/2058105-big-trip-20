@@ -68,40 +68,74 @@ class RouteListPresenter extends Presenter {
    * @override
    */
   addEventListeners() {
+    this.view.addEventListener('open', this.handleOpenView.bind(this));
+    this.view.addEventListener('close', this.handleCloseView.bind(this));
+    this.view.addEventListener('favorite', this.handleFavoriteView.bind(this));
+    this.view.addEventListener('edit', this.handleEditView.bind(this));
+  }
+
+  /**
+   * @param {CustomEvent & {target: CardView}} event
+   */
+  handleOpenView(event) {
     /**
-     * @param {CustomEvent & {target: CardView}} event
+     * @type {UrlParams}
      */
-    const handleOpenView = (event) => {
-      /**
-       * @type {UrlParams}
-       */
-      const urlParams = this.getUrlParams();
-      urlParams.edit = event.target.state.id;
-      this.setUrlParams(urlParams);
-    };
+    const urlParams = this.getUrlParams();
+    urlParams.edit = event.target.state.id;
+    this.setUrlParams(urlParams);
+  }
 
-    const handleCloseView = () => {
-      /**
-       * @type {UrlParams}
-       */
-      const urlParams = this.getUrlParams();
-      delete urlParams.edit;
-      this.setUrlParams(urlParams);
-    };
-
+  handleCloseView() {
     /**
-     * @param {CustomEvent & {target: CardView}} event
+     * @type {UrlParams}
      */
-    const handleFavoriteView = (event) => {
-      const card = event.target;
-      const point = card.state;
-      point.isFavorite = !point.isFavorite;//инверсия, поменяет булево значение на противоположное
-      card.render();
-    };
+    const urlParams = this.getUrlParams();
+    delete urlParams.edit;
+    this.setUrlParams(urlParams);
+  }
 
-    this.view.addEventListener('open', handleOpenView);
-    this.view.addEventListener('close', handleCloseView);
-    this.view.addEventListener('favorite', handleFavoriteView);
+  /**
+   * @param {CustomEvent & {target: CardView}} event
+   */
+  handleFavoriteView(event) {
+    const card = event.target;
+    const point = card.state;
+    point.isFavorite = !point.isFavorite;//инверсия, поменяет булево значение на противоположное
+    card.render();
+  }
+
+  /**
+   *
+   * @param {CustomEvent<HTMLInputElement> & {target: EditorView}} event
+   */
+  handleEditView(event) {
+    const editor = event.target;
+    const field = event.detail;
+    const point = editor.state;
+
+    switch(field.name) {
+      case 'event-type' : {
+        const offerGroups = this.model.getOffersGroups();
+        const {offers} = offerGroups.find((it) => it.type === field.value);
+
+        point.offers = offers;
+        point.types.forEach((it) => {
+          it.isSelected = it.value === field.value;
+        });
+        editor.renderTypeAndRelatedFields();
+        break;
+      }
+      case 'event-destination': {
+        const name = field.value.trim();
+
+        point.destinations.forEach((it) => {
+          it.isSelected = it.name === name;
+        });
+        editor.renderDestination();
+        break;
+      }
+    }
   }
 }
 
