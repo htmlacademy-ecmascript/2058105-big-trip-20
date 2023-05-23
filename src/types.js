@@ -10,6 +10,7 @@
  * @typedef {import('./views/sort-view.js').default} SortView
  * @typedef {import('./views/route-list-view.js').default} RouteListView
  * @typedef {import('./views/card-view.js').default} CardView
+ * @typedef {import('./views/editor-view.js').default} EditorView
 */
 
 /**
@@ -73,7 +74,7 @@
  * @prop {string} endTime
  * @prop {string} duration
  * @prop {number} basePrice
- * @prop {Array<Offer & {isSelected: boolean}>} offers
+ * @prop {Array<Offer & {isSelected?: boolean}>} offers
  * @prop {boolean} isFavorite
  * @prop {boolean} isEditable
  */

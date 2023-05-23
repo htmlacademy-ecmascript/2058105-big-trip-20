@@ -71,6 +71,7 @@ class RouteListPresenter extends Presenter {
     this.view.addEventListener('open', this.handleOpenView.bind(this));
     this.view.addEventListener('close', this.handleCloseView.bind(this));
     this.view.addEventListener('favorite', this.handleFavoriteView.bind(this));
+    this.view.addEventListener('edit', this.handleEditView.bind(this));
   }
 
   /**
@@ -102,6 +103,39 @@ class RouteListPresenter extends Presenter {
     const point = card.state;
     point.isFavorite = !point.isFavorite;//инверсия, поменяет булево значение на противоположное
     card.render();
+  }
+
+  /**
+   *
+   * @param {CustomEvent<HTMLInputElement> & {target: EditorView}} event
+   */
+  handleEditView(event) {
+    const editor = event.target;
+    const field = event.detail;
+    const point = editor.state;
+
+    switch(field.name) {
+      case 'event-type' : {
+        const offerGroups = this.model.getOffersGroups();
+        const {offers} = offerGroups.find((it) => it.type === field.value);
+
+        point.offers = offers;
+        point.types.forEach((it) => {
+          it.isSelected = it.value === field.value;
+        });
+        editor.renderTypeAndRelatedFields();
+        break;
+      }
+      case 'event-destination': {
+        const name = field.value.trim();
+
+        point.destinations.forEach((it) => {
+          it.isSelected = it.name === name;
+        });
+        editor.renderDestination();
+        break;
+      }
+    }
   }
 }
 

@@ -31,7 +31,6 @@ class SortPresenter extends Presenter {
    * @override
    */
   addEventListeners() {
-
     this.view.addEventListener('change', this.handleViewChange.bind(this));
   }
 
