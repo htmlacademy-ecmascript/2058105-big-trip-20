@@ -1,6 +1,7 @@
 import {formatDate, formatDuration, formatTime} from '../utils.js';
 import Presenter from './presenter.js';
 
+
 /**
  * @extends {Presenter<RouteListView, AppModel>}
  */

@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
 import durationPlugin from 'dayjs/plugin/duration.js';
 import {escape as escapeHtml} from 'he';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.css';
 
 dayjs.extend(durationPlugin);
 
@@ -39,6 +41,21 @@ function formatDuration(startDateTime, endDateTime) {
   return duration.format('mm[m]');
 }
 
+/**
+ * @param {HTMLInputElement} startDateField
+ * @param {HTMLInputElement} endDateField
+ * @return {() => void}//после вызова функции flatpickr удаляется и функция ничего не возвращает
+ */
+function createDatePickers(startDateField, endDateField) {
+  const startDateFlatpickr = flatpickr(startDateField);
+  const endDateFlatpickr = flatpickr(endDateField);
+
+  return () => {
+    startDateFlatpickr.destroy();
+    endDateFlatpickr.destroy();
+  };
+}
+
 class SafeHtml extends String {}
 
 /**
@@ -69,4 +86,4 @@ function html(strings, ...values) {
   return new SafeHtml(result);
 }
 
-export {formatDate, formatTime, formatDuration, SafeHtml, html};
+export {formatDate, formatTime, formatDuration, SafeHtml, html, createDatePickers};
