@@ -57,10 +57,16 @@ function createDatePickers(startDateField, endDateField) {
     altFormat: 'd/m/y H:i',
     locale: {
       firstDayOfWeek: 1
-    }
+    },
+    enableTime: true,
+    'time_24hr': true
   };
+
   const startDateFlatpickr = flatpickr(startDateField, options);
   const endDateFlatpickr = flatpickr(endDateField, options);
+
+  startDateFlatpickr.set('onChange', (dates) => endDateFlatpickr.set('minDate', dates.at(0)));
+  endDateFlatpickr.set('minDate', startDateFlatpickr.selectedDates.at(0));
 
   return () => {
     startDateFlatpickr.destroy();
