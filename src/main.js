@@ -4,6 +4,7 @@ import './views/filter-view.js';
 import './views/sort-view.js';
 import './views/route-list-view.js';
 import './views/route-list-view.js';
+
 import AppModel from './models/app-model.js';
 import BriefPresenter from './presenters/brief-presenter.js';
 import AddPresenter from './presenters/add-presenter.js';

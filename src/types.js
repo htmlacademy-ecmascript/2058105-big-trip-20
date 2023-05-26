@@ -1,4 +1,8 @@
 /**
+ * @typedef {import('flatpickr/dist/types/options.js').Options} FlatpickrOptions
+ */
+
+/**
  * @typedef {import('./utils.js').SafeHtml} SafeHtml
  */
 
@@ -144,4 +148,3 @@
 /**
  * @typedef {'taxi' | 'bus' | 'train' | 'ship' | 'drive' | 'flight' | 'check-in' | 'sightseeing' | 'restaurant'} PointType
  */
-
