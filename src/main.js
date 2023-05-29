@@ -22,4 +22,4 @@ new AddPresenter(document.querySelector('add-view'));
 new FilterPresenter(document.querySelector('filter-view'));
 new RouteListPresenter(document.querySelector('route-list-view'), appModel);
 new SortPresenter(document.querySelector('sort-view'));
-new PlaceholderPresenter(document.querySelector('placeholder-view'));
+new PlaceholderPresenter(document.querySelector('placeholder-view'), appModel);

@@ -12,7 +12,8 @@ class Presenter {
     this.view = view;
     this.model = model;
     this.addEventListeners();
-    this.updateView();
+    //отложенный вызов updateView будет вызван после дочернего презентера, чтобы все переменные дочерние в т.ч. textMap сработал правильно
+    window.queueMicrotask(() => this.updateView());
     window.addEventListener('popstate', () => this.updateView());
   }
 

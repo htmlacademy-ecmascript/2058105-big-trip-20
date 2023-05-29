@@ -85,6 +85,12 @@
  */
 
 /**
+ * @typedef PlaceholderViewState
+ * @prop {string} text
+ * @prop {boolean} isHidden
+ */
+
+/**
  * @typedef UrlParams
  * @prop {string} [edit]
  * @prop {SortType} [sort]
