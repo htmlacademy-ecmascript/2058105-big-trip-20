@@ -15,6 +15,7 @@
  * @typedef {import('./views/route-list-view.js').default} RouteListView
  * @typedef {import('./views/card-view.js').default} CardView
  * @typedef {import('./views/editor-view.js').default} EditorView
+ * @typedef {import('./views/placeholder-view.js').default} PlaceholderView
 */
 
 /**
