@@ -14,10 +14,6 @@ import SortPresenter from './presenters/sort-presenter.js';
 
 const appModel = new AppModel();
 
-console.table(
-  appModel.getPoints({filter: 'present'})
-);
-
 new BriefPresenter(document.querySelector('brief-view'));
 new AddPresenter(document.querySelector('add-view'));
 new FilterPresenter(document.querySelector('filter-view'));
