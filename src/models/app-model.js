@@ -9,6 +9,16 @@ class AppModel extends Model {
   #destinations = destinations;
 
   /**
+   * @type {Record<FilterType, (it: Point) => boolean>}
+   */
+  #filterCallbackMap = {
+    everything: () => true,
+    future: (it) => Date.now() < Date.parse(it.startDateTime),
+    present: (it) => !this.#filterCallbackMap.past(it) && !this.#filterCallbackMap.future(it),
+    past: (it) => Date.now() > Date.parse(it.endDateTime)
+  };
+
+  /**
    * @type {Record<SortType, (a : Point, b : Point) => number>}
    */
   #sortCallbackMap = {
@@ -21,13 +31,14 @@ class AppModel extends Model {
   };
 
   /**
-   * @param {{sort?: SortType}} [criteria]
+   * @param {{filter?: FilterType, sort?: SortType}} [criteria]
    * @return {Array<Point>}
    */
   getPoints (criteria = {}) {
     const adaptedPoints = this.#points.map(AppModel.adaptPointForUser);
+    const filterCallback = this.#filterCallbackMap[criteria.filter] ?? this.#filterCallbackMap.everything;
     const sortCallback = this.#sortCallbackMap[criteria.sort] ?? this.#sortCallbackMap.day;
-    return adaptedPoints.sort(sortCallback);
+    return adaptedPoints.filter(filterCallback).sort(sortCallback);
   }
 
   /**
