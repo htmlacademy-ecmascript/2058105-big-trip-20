@@ -90,6 +90,7 @@ class RouteListPresenter extends Presenter {
     this.view.addEventListener('close', this.handleCloseView.bind(this));
     this.view.addEventListener('favorite', this.handleFavoriteView.bind(this));
     this.view.addEventListener('edit', this.handleEditView.bind(this));
+    this.view.addEventListener('save', this.handleSaveView.bind(this));
   }
 
   /**
@@ -154,7 +155,36 @@ class RouteListPresenter extends Presenter {
         editor.renderDestination();
         break;
       }
+      case 'event-start-time': {
+        point.startDateTime = field.value;
+        break;
+      }
+      case 'event-end-time': {
+        point.endDateTime = field.value;
+        break;
+      }
+      case 'event-price': {
+        point.basePrice = Number(field.value);
+        break;
+      }
+      case 'event-offer': {
+        const offer = point.offers.find((it) => it.id === field.value);
+        offer.isSelected = !offer.isSelected;
+        break;
+      }
     }
+  }
+
+  /**
+   * @param {CustomEvent & {target: EditorView}} event
+   */
+  handleSaveView(event) {
+    const editor = event.target;
+    const point = editor.state;
+
+    event.preventDefault();
+    this.model.updatePoint(this.serializePointViewState(point));
+    this.handleCloseView();
   }
 }
 
