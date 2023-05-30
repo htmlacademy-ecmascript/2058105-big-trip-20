@@ -120,7 +120,7 @@ class RouteListPresenter extends Presenter {
     const card = event.target;
     const point = card.state;
     point.isFavorite = !point.isFavorite;//инверсия
-    console.log(this.serializePointViewState(point))
+    this.model.updatePoint(this.serializePointViewState(point));
     card.render();
   }
 

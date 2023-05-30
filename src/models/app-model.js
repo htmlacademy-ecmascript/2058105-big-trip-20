@@ -34,7 +34,7 @@ class AppModel extends Model {
    * @param {{filter?: FilterType, sort?: SortType}} [criteria]
    * @return {Array<Point>}
    */
-  getPoints (criteria = {}) {
+  getPoints(criteria = {}) {
     const adaptedPoints = this.#points.map(AppModel.adaptPointForUser);
     const filterCallback = this.#filterCallbackMap[criteria.filter] ?? this.#filterCallbackMap.everything;
     const sortCallback = this.#sortCallbackMap[criteria.sort] ?? this.#sortCallbackMap.day;
@@ -42,9 +42,19 @@ class AppModel extends Model {
   }
 
   /**
+   * @param {Point} point
+   */
+  updatePoint(point) {
+    const adaptedPoint = AppModel.adaptPointForServer(point);
+    const index = this.#points.findIndex((it) => it.id === adaptedPoint.id);
+
+    this.#points.splice(index, 1, adaptedPoint);
+  }
+
+  /**
    * @return {Array<Destination>}
    */
-  getDestinations () {
+  getDestinations() {
     return structuredClone(this.#destinations);
   }
 
@@ -78,6 +88,23 @@ class AppModel extends Model {
       basePrice: point.base_price,
       offerIds: point.offers,
       isFavorite: point.is_favorite
+    };
+  }
+
+  /**
+   * @param {Point} point
+   * @return {PointInSnakeCase}
+   */
+  static adaptPointForServer(point) {
+    return {
+      'id': point.id,
+      'type': point.type,
+      'destination': point.destinationId,
+      'date_from': point.startDateTime,
+      'date_to': point.endDateTime,
+      'base_price': point.basePrice,
+      'offers': point.offerIds,
+      'is_favorite': point.isFavorite
     };
   }
 }
