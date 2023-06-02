@@ -91,6 +91,7 @@ class RouteListPresenter extends Presenter {
     this.view.addEventListener('favorite', this.handleFavoriteView.bind(this));
     this.view.addEventListener('edit', this.handleEditView.bind(this));
     this.view.addEventListener('save', this.handleSaveView.bind(this));
+    this.view.addEventListener('delete', this.handleDeleteView.bind(this));
   }
 
   /**
@@ -184,6 +185,19 @@ class RouteListPresenter extends Presenter {
 
     event.preventDefault();
     this.model.updatePoint(this.serializePointViewState(point));
+    this.handleCloseView();
+  }
+
+  /**
+   * @param {CustomEvent & {target: EditorView}} event
+   */
+  handleDeleteView(event) {
+    const editor = event.target;
+    const point = editor.state;
+
+    event.preventDefault();
+    this.model.deletePoint(point.id);
+    console.log(this.model.getPoints());
     this.handleCloseView();
   }
 }
