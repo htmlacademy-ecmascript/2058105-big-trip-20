@@ -77,7 +77,8 @@ class EditorView extends View {
    * @param {Event} event
    */
   handleReset(event) {
-    const actByDefault = this.notify('delete');
+    const point = this.state;
+    const actByDefault = this.notify(point.isDraft ? 'close' : 'delete');
 
     if(!actByDefault) {
       event.preventDefault();
@@ -204,6 +205,13 @@ class EditorView extends View {
    * @return {SafeHtml}
    */
   createResetButtonHtml() {
+    const point = this.state;
+
+    if(point.isDraft) {
+      return html`
+      <button class="event__reset-btn" type="reset">Cancel</button>
+    `;
+    }
     return html`
       <button class="event__reset-btn" type="reset">Delete</button>
     `;
@@ -213,6 +221,11 @@ class EditorView extends View {
    * @return {SafeHtml}
    */
   createCloseButtonHtml() {
+    const point = this.state;
+
+    if(point.isDraft) {
+      return '';
+    }
     return html`
       <button class="event__rollup-btn" type="button">
         <span class="visually-hidden">Close event</span>

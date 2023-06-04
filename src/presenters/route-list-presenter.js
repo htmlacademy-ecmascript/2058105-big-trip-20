@@ -15,14 +15,26 @@ class RouteListPresenter extends Presenter {
      * @type {UrlParams}
      */
     const urlParams = this.getUrlParams();
-
     const points = this.model.getPoints(urlParams);
     const items = points.map(this.createPointViewState, this);
+
+    if(urlParams.edit === 'draft') {
+      /**точка маршрута с неполными полями
+       * @type {Partial<Point>}
+       */
+      const draftPoint = {
+        type: 'taxi',
+        offerIds: [],
+        isFavorite: false,
+      };
+
+      items.unshift(this.createPointViewState(draftPoint));
+    }
     return {items};
   }
 
   /**
-   * @param {Point} point
+   * @param {Partial<Point>} point
    * @return {PointViewState}
    */
   createPointViewState(point) {
@@ -47,6 +59,8 @@ class RouteListPresenter extends Presenter {
      * @type {UrlParams}
      */
     const urlParams = this.getUrlParams();
+    const isDraft = point.id === undefined;
+    const isEditable = isDraft || point.id === urlParams.edit;
 
     return {
       id: point.id,
@@ -61,7 +75,8 @@ class RouteListPresenter extends Presenter {
       basePrice: point.basePrice,
       offers,
       isFavorite: point.isFavorite,
-      isEditable: point.id === urlParams.edit
+      isEditable,
+      isDraft
     };
   }
 
@@ -184,7 +199,12 @@ class RouteListPresenter extends Presenter {
     const point = editor.state;
 
     event.preventDefault();
-    this.model.updatePoint(this.serializePointViewState(point));
+
+    if(point.isDraft) {
+      this.model.addPoint(this.serializePointViewState(point));
+    } else {
+      this.model.updatePoint(this.serializePointViewState(point));
+    }
     this.handleCloseView();
   }
 
@@ -197,7 +217,6 @@ class RouteListPresenter extends Presenter {
 
     event.preventDefault();
     this.model.deletePoint(point.id);
-    console.log(this.model.getPoints());
     this.handleCloseView();
   }
 }
