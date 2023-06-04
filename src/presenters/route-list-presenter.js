@@ -15,14 +15,26 @@ class RouteListPresenter extends Presenter {
      * @type {UrlParams}
      */
     const urlParams = this.getUrlParams();
-
     const points = this.model.getPoints(urlParams);
     const items = points.map(this.createPointViewState, this);
+
+    if(urlParams.edit === 'draft') {
+      /**точка маршрута с неполными полями
+       * @type {Partial<Point>}
+       */
+      const draftPoint = {
+        type: 'taxi',
+        offerIds: [],
+        isFavorite: false,
+      };
+
+      items.unshift(this.createPointViewState(draftPoint));
+    }
     return {items};
   }
 
   /**
-   * @param {Point} point
+   * @param {Partial<Point>} point
    * @return {PointViewState}
    */
   createPointViewState(point) {
@@ -47,6 +59,8 @@ class RouteListPresenter extends Presenter {
      * @type {UrlParams}
      */
     const urlParams = this.getUrlParams();
+    const isDraft = point.id === undefined;
+    const isEditable = isDraft || point.id === urlParams.edit;
 
     return {
       id: point.id,
@@ -61,7 +75,25 @@ class RouteListPresenter extends Presenter {
       basePrice: point.basePrice,
       offers,
       isFavorite: point.isFavorite,
-      isEditable: point.id === urlParams.edit
+      isEditable,
+      isDraft
+    };
+  }
+
+  /**
+   * @param {PointViewState} point
+   * @return {Point}
+   */
+  serializePointViewState(point) {
+    return {
+      id: point.id,
+      type: point.types.find((it) => it.isSelected).value,//find вернет один элемент
+      destinationId: point.destinations.find((it) => it.isSelected)?.id,
+      startDateTime: point.startDateTime,
+      endDateTime: point.endDateTime,
+      basePrice: point.basePrice,
+      offerIds: point.offers.filter((it) => it.isSelected).map((it) => it.id),//filter вернет все элементы
+      isFavorite: point.isFavorite
     };
   }
 
@@ -73,6 +105,8 @@ class RouteListPresenter extends Presenter {
     this.view.addEventListener('close', this.handleCloseView.bind(this));
     this.view.addEventListener('favorite', this.handleFavoriteView.bind(this));
     this.view.addEventListener('edit', this.handleEditView.bind(this));
+    this.view.addEventListener('save', this.handleSaveView.bind(this));
+    this.view.addEventListener('delete', this.handleDeleteView.bind(this));
   }
 
   /**
@@ -102,7 +136,8 @@ class RouteListPresenter extends Presenter {
   handleFavoriteView(event) {
     const card = event.target;
     const point = card.state;
-    point.isFavorite = !point.isFavorite;//инверсия, поменяет булево значение на противоположное
+    point.isFavorite = !point.isFavorite;//инверсия
+    this.model.updatePoint(this.serializePointViewState(point));
     card.render();
   }
 
@@ -136,7 +171,53 @@ class RouteListPresenter extends Presenter {
         editor.renderDestination();
         break;
       }
+      case 'event-start-time': {
+        point.startDateTime = field.value;
+        break;
+      }
+      case 'event-end-time': {
+        point.endDateTime = field.value;
+        break;
+      }
+      case 'event-price': {
+        point.basePrice = Number(field.value);
+        break;
+      }
+      case 'event-offer': {
+        const offer = point.offers.find((it) => it.id === field.value);
+        offer.isSelected = !offer.isSelected;
+        break;
+      }
     }
+  }
+
+  /**
+   * @param {CustomEvent & {target: EditorView}} event
+   */
+  handleSaveView(event) {
+    const editor = event.target;
+    const point = editor.state;
+
+    event.preventDefault();
+
+    if(point.isDraft) {
+      this.model.addPoint(this.serializePointViewState(point));
+    } else {
+      this.model.updatePoint(this.serializePointViewState(point));
+    }
+    this.handleCloseView();
+  }
+
+  /**
+   * @param {CustomEvent & {target: EditorView}} event
+   */
+  handleDeleteView(event) {
+    const editor = event.target;
+    const point = editor.state;
+
+    event.preventDefault();
+    this.model.deletePoint(point.id);
+    this.handleCloseView();
   }
 }
 
