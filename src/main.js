@@ -18,6 +18,8 @@ import PlaceholderPresenter from './presenters/placeholder-presenter.js';
 
 const apiService = new ApiService({authorization: 'Basic neponimat123'});
 const appModel = new AppModel(apiService);
+console.log(appModel);
+new PlaceholderPresenter(document.querySelector('placeholder-view'), appModel);
 
 //все презентеры инициируются только после загрузки всех данных с сервера
 appModel.load().then(() => {
@@ -26,5 +28,4 @@ appModel.load().then(() => {
   new FilterPresenter(document.querySelector('filter-view'));
   new RouteListPresenter(document.querySelector('route-list-view'), appModel);
   new SortPresenter(document.querySelector('sort-view'));
-  new PlaceholderPresenter(document.querySelector('placeholder-view'), appModel);
 });
