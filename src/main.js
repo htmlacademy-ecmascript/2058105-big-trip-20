@@ -18,7 +18,7 @@ import PlaceholderPresenter from './presenters/placeholder-presenter.js';
 
 const apiService = new ApiService({authorization: 'Basic neponimat123'});
 const appModel = new AppModel(apiService);
-console.log(appModel);
+
 new PlaceholderPresenter(document.querySelector('placeholder-view'), appModel);
 
 //все презентеры инициируются только после загрузки всех данных с сервера

@@ -53,18 +53,23 @@ class AppModel extends Model {
    * @return {Promise<void>}
    */
   async load() {
-    const data = await Promise.all([
-      this.#apiService.getPoints(),
-      this.#apiService.getDestinations(),
-      this.#apiService.getOfferGroups()
-    ]);
-    const [points, destinations, offerGroups] = data; //деструктурируем
-    this.#points = points;
-    this.#destinations = destinations;
-    this.#offerGroups = offerGroups;
+    try {
+      const data = await Promise.all([
+        this.#apiService.getPoints(),
+        this.#apiService.getDestinations(),
+        this.#apiService.getOfferGroups()
+      ]);
+      const [points, destinations, offerGroups] = data; //деструктурируем
 
-    //модель отправляет уведомление когда произойдет загрузка данных
-    this.notify('load');
+      this.#points = points;
+      this.#destinations = destinations;
+      this.#offerGroups = offerGroups;
+      //модель отправляет уведомление когда произойдет загрузка данных
+      this.notify('load');
+    } catch (error) {
+      this.notify('error', error);
+      throw error;
+    }
   }
 
   /**
