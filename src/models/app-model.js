@@ -1,4 +1,3 @@
-import ApiService from '../services/api-service.js';
 import Model from './model.js';
 
 class AppModel extends Model {
