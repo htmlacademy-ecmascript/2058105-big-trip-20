@@ -133,11 +133,11 @@ class RouteListPresenter extends Presenter {
   /**
    * @param {CustomEvent & {target: CardView}} event
    */
-  handleFavoriteView(event) {
+  async handleFavoriteView(event) {
     const card = event.target;
     const point = card.state;
     point.isFavorite = !point.isFavorite;//инверсия
-    this.model.updatePoint(this.serializePointViewState(point));
+    await this.model.updatePoint(this.serializePointViewState(point));
     card.render();
   }
 
@@ -194,16 +194,16 @@ class RouteListPresenter extends Presenter {
   /**
    * @param {CustomEvent & {target: EditorView}} event
    */
-  handleSaveView(event) {
+  async handleSaveView(event) {
     const editor = event.target;
     const point = editor.state;
 
     event.preventDefault();
 
     if(point.isDraft) {
-      this.model.addPoint(this.serializePointViewState(point));
+      await this.model.addPoint(this.serializePointViewState(point));
     } else {
-      this.model.updatePoint(this.serializePointViewState(point));
+      await this.model.updatePoint(this.serializePointViewState(point));
     }
     this.handleCloseView();
   }
@@ -211,12 +211,12 @@ class RouteListPresenter extends Presenter {
   /**
    * @param {CustomEvent & {target: EditorView}} event
    */
-  handleDeleteView(event) {
+  async handleDeleteView(event) {
     const editor = event.target;
     const point = editor.state;
 
     event.preventDefault();
-    this.model.deletePoint(point.id);
+    await this.model.deletePoint(point.id);
     this.handleCloseView();
   }
 }
