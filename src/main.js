@@ -28,7 +28,7 @@ appModel.load().then(() => {
   new BriefPresenter(document.querySelector('brief-view'));
   new AddPresenter(document.querySelector('add-view'));
   new FilterPresenter(document.querySelector('filter-view'), appModel);
-  new SortPresenter(document.querySelector('sort-view'));
+  new SortPresenter(document.querySelector('sort-view'), appModel);
   new RouteListPresenter(document.querySelector('route-list-view'), appModel);
   new OverlayPresenter(document.querySelector('overlay-view'), appModel);
 });
