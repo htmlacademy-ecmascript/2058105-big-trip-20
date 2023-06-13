@@ -8,7 +8,7 @@ dayjs.extend(durationPlugin);
 
 /**
  * @param {string | dayjs.Dayjs} dateTime
- * @param {boolean} [isNarrow] сокращенный формат даты(без месяца)
+ * @param {boolean} [isNarrow]
  * @return {string}
  */
 function formatDate(dateTime, isNarrow) {
@@ -31,10 +31,8 @@ function formatDateRange(startDateTime, endDateTime) {
   return [
     formatDate(start),
     formatDate(end, start.isSame(end, 'month'))
-  ].join(' - ');
+  ].join(' — ');
 }
-
-console.log(formatDateRange('2023-05-18', '2023-05-18'));
 
 /**
  * @param {string} dateTime
@@ -126,4 +124,11 @@ function html(strings, ...values) {
   return new SafeHtml(result);
 }
 
-export {formatDate, formatTime, formatDuration, SafeHtml, html, createDatePickers};
+export {
+  formatDate,
+  formatTime,
+  formatDuration,
+  formatDateRange,
+  SafeHtml,
+  html,
+  createDatePickers};
