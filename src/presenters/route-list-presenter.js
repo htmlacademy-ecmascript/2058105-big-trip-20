@@ -136,9 +136,14 @@ class RouteListPresenter extends Presenter {
   async handleFavoriteView(event) {
     const card = event.target;
     const point = card.state;
-    point.isFavorite = !point.isFavorite;//инверсия
-    await this.model.updatePoint(this.serializePointViewState(point));
-    card.render();
+    try {
+      point.isFavorite = !point.isFavorite;//инверсия
+      await this.model.updatePoint(this.serializePointViewState(point));
+      card.render();
+
+    } catch {
+      card.shake();
+    }
   }
 
   /**
@@ -197,17 +202,22 @@ class RouteListPresenter extends Presenter {
   async handleSaveView(event) {
     const editor = event.target;
     const point = editor.state;
+    try {
+      event.preventDefault();
+      point.isSaving = true;
+      editor.renderSaveButton();
 
-    event.preventDefault();
-    point.isSaving = true;
-    editor.renderSaveButton();
-
-    if(point.isDraft) {
-      await this.model.addPoint(this.serializePointViewState(point));
-    } else {
-      await this.model.updatePoint(this.serializePointViewState(point));
+      if(point.isDraft) {
+        await this.model.addPoint(this.serializePointViewState(point));
+      } else {
+        await this.model.updatePoint(this.serializePointViewState(point));
+      }
+      this.handleCloseView();
+    } catch {
+      point.isSaving = false;
+      editor.renderSaveButton();
+      editor.shake();
     }
-    this.handleCloseView();
   }
 
   /**
@@ -217,11 +227,17 @@ class RouteListPresenter extends Presenter {
     const editor = event.target;
     const point = editor.state;
 
-    event.preventDefault();
-    point.isDeleting = true;
-    editor.renderResetButton();
-    await this.model.deletePoint(point.id);
-    this.handleCloseView();
+    try {
+      event.preventDefault();
+      point.isDeleting = true;
+      editor.renderResetButton();
+      await this.model.deletePoint(point.id);
+      this.handleCloseView();
+    } catch {
+      point.isDeleting = false;
+      editor.renderResetButton();
+      editor.shake();
+    }
   }
 }
 
