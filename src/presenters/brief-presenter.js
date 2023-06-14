@@ -52,11 +52,24 @@ class BriefPresenter extends Presenter {
     return '';
   }
 
-  /**
-   * @return {string}
+  /**находим все офферы, выбираем отмеченные, и суммируем прайс методом reduce
+   * @return {number}
    */
   getCost() {
-    return '1230';
+    const points = this.model.getPoints();
+    const OfferGroups = this.model.getOffersGroups();
+
+    return points.reduce((totalCost, point) => {
+      const {offers} = OfferGroups.find((it) => it.type === point.type);
+      const pointCost = offers.reduce((cost, offer) => {
+        if(point.offerIds.includes(offer.id)) {
+          return cost + offer.price;
+        }
+        return cost;
+      }, point.basePrice);
+
+      return totalCost + pointCost;
+    }, 0);
   }
 }
 
