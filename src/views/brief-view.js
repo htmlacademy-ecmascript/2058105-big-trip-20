@@ -16,6 +16,11 @@ class BriefView extends View {
    */
   createHtml() {
     const trip = this.state;
+
+    if(!trip.places) {
+      return '';
+    }
+
     return html`
     <div class="trip-info__main">
       <h1 class="trip-info__title">${trip.places}</h1>
