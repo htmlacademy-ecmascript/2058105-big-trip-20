@@ -4,6 +4,14 @@ import {escape as escapeHtml} from 'he';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.css';
 
+//форматы дат dayjs
+const TIMEFORMAT = 'HH:mm';
+const FULLDAYFORMAT = 'DD[d] HH[h] mm[m]';
+const HALFDAYFORMAT = 'HH[h] mm[m]';
+const MINDAYFORMAT = 'mm[m]';
+const DAYFORMAT = 'D';
+const MOHTHDAYFORMAT = 'MMM D';
+
 dayjs.extend(durationPlugin);
 
 /**
@@ -12,7 +20,7 @@ dayjs.extend(durationPlugin);
  * @return {string}
  */
 function formatDate(dateTime, isNarrow) {
-  return dayjs(dateTime).format(isNarrow ? 'D' : 'MMM D');
+  return dayjs(dateTime).format(isNarrow ? DAYFORMAT : MOHTHDAYFORMAT);
 }
 
 /**
@@ -39,7 +47,7 @@ function formatDateRange(startDateTime, endDateTime) {
  * @return {string}
  */
 function formatTime(dateTime) {
-  return dayjs(dateTime).format('HH:mm');
+  return dayjs(dateTime).format(TIMEFORMAT);
 }
 
 /**
@@ -52,13 +60,13 @@ function formatDuration(startDateTime, endDateTime) {
   const duration = dayjs.duration(ms);
 
   if (duration.days()) {
-    return duration.format('DD[d] HH[h] mm[m]');
+    return duration.format(FULLDAYFORMAT);
   }
 
   if (duration.hours()) {
-    return duration.format('HH[h] mm[m]');
+    return duration.format(HALFDAYFORMAT);
   }
-  return duration.format('mm[m]');
+  return duration.format(MINDAYFORMAT);
 }
 
 /**
@@ -67,7 +75,7 @@ function formatDuration(startDateTime, endDateTime) {
  * @return {() => void}//после вызова функции flatpickr удаляется и функция ничего не возвращает
  */
 function createDatePickers(startDateField, endDateField) {
-  /**
+  /**настройка опций календаря
    * @type {FlatpickrOptions}
    */
   const options = {
@@ -101,7 +109,7 @@ class SafeHtml extends String {}
  * @param {...any} values
  * @return {SafeHtml}
  */
-//тег для шаблонных строк
+
 function html(strings, ...values) {
   const result = strings.reduce((before, after, index) => {
     const value = values[index - 1];
