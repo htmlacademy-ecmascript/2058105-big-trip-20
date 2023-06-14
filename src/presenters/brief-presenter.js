@@ -21,7 +21,20 @@ class BriefPresenter extends Presenter {
    * @return {string}
    */
   getPlaces() {
-    return 'Amsterdam — Chamonix — Geneva';
+    const points = this.model.getPoints();
+    const destinations = this.model.getDestinations();
+
+    //находим название направления, которое соответствует точке маршрута
+    const names = points.map((point) => {
+      const destination = destinations.find((it) => it.id === point.destinationId);
+      return destination.name;
+    });
+
+    //оставляем только первый и последний город
+    if(names.length > 3) {
+      names.splice(1, names.length - 2, '...');
+    }
+    return names.join(' — ');
   }
 
   /**

@@ -131,4 +131,5 @@ export {
   formatDateRange,
   SafeHtml,
   html,
-  createDatePickers};
+  createDatePickers
+};
