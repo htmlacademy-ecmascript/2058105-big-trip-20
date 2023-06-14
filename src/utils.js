@@ -4,14 +4,42 @@ import {escape as escapeHtml} from 'he';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.css';
 
+//форматы дат dayjs
+const TIMEFORMAT = 'HH:mm';
+const FULLDAYFORMAT = 'DD[d] HH[h] mm[m]';
+const HALFDAYFORMAT = 'HH[h] mm[m]';
+const MINDAYFORMAT = 'mm[m]';
+const DAYFORMAT = 'D';
+const MOHTHDAYFORMAT = 'MMM D';
+
 dayjs.extend(durationPlugin);
 
 /**
- * @param {string} dateTime
+ * @param {string | dayjs.Dayjs} dateTime
+ * @param {boolean} [isNarrow]
  * @return {string}
  */
-function formatDate(dateTime) {
-  return dayjs(dateTime).format('MMM D');
+function formatDate(dateTime, isNarrow) {
+  return dayjs(dateTime).format(isNarrow ? DAYFORMAT : MOHTHDAYFORMAT);
+}
+
+/**
+ * @param {string} startDateTime
+ * @param {string} endDateTime
+ * @return {string}
+ */
+function formatDateRange(startDateTime, endDateTime) {
+  const start = dayjs(startDateTime);
+  const end = dayjs(endDateTime);
+
+  if(start.isSame(end, 'day')) {
+    return formatDate(start);
+  }
+
+  return [
+    formatDate(start),
+    formatDate(end, start.isSame(end, 'month'))
+  ].join(' — ');
 }
 
 /**
@@ -19,7 +47,7 @@ function formatDate(dateTime) {
  * @return {string}
  */
 function formatTime(dateTime) {
-  return dayjs(dateTime).format('HH:mm');
+  return dayjs(dateTime).format(TIMEFORMAT);
 }
 
 /**
@@ -32,13 +60,13 @@ function formatDuration(startDateTime, endDateTime) {
   const duration = dayjs.duration(ms);
 
   if (duration.days()) {
-    return duration.format('DD[d] HH[h] mm[m]');
+    return duration.format(FULLDAYFORMAT);
   }
 
   if (duration.hours()) {
-    return duration.format('HH[h] mm[m]');
+    return duration.format(HALFDAYFORMAT);
   }
-  return duration.format('mm[m]');
+  return duration.format(MINDAYFORMAT);
 }
 
 /**
@@ -47,7 +75,7 @@ function formatDuration(startDateTime, endDateTime) {
  * @return {() => void}//после вызова функции flatpickr удаляется и функция ничего не возвращает
  */
 function createDatePickers(startDateField, endDateField) {
-  /**
+  /**настройка опций календаря
    * @type {FlatpickrOptions}
    */
   const options = {
@@ -81,7 +109,7 @@ class SafeHtml extends String {}
  * @param {...any} values
  * @return {SafeHtml}
  */
-//тег для шаблонных строк
+
 function html(strings, ...values) {
   const result = strings.reduce((before, after, index) => {
     const value = values[index - 1];
@@ -104,4 +132,12 @@ function html(strings, ...values) {
   return new SafeHtml(result);
 }
 
-export {formatDate, formatTime, formatDuration, SafeHtml, html, createDatePickers};
+export {
+  formatDate,
+  formatTime,
+  formatDuration,
+  formatDateRange,
+  SafeHtml,
+  html,
+  createDatePickers
+};
