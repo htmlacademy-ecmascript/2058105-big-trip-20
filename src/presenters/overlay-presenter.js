@@ -37,4 +37,3 @@ class OverlayPresenter extends Presenter {
 }
 
 export default OverlayPresenter;
-

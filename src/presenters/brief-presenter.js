@@ -52,7 +52,7 @@ class BriefPresenter extends Presenter {
     return '';
   }
 
-  /**находим все офферы, выбираем отмеченные, и суммируем прайс методом reduce
+  /**
    * @return {number}
    */
   getCost() {
@@ -61,6 +61,7 @@ class BriefPresenter extends Presenter {
 
     return points.reduce((totalCost, point) => {
       const {offers} = OfferGroups.find((it) => it.type === point.type);
+      //суммируем прайс методом reduce
       const pointCost = offers.reduce((cost, offer) => {
         if(point.offerIds.includes(offer.id)) {
           return cost + offer.price;
