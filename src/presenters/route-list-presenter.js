@@ -19,7 +19,7 @@ class RouteListPresenter extends Presenter {
     const items = points.map(this.createPointViewState, this);
 
     if(urlParams.edit === 'draft') {
-      /**точка маршрута с неполными полями
+      /**
        * @type {Partial<Point>}
        */
       const draftPoint = {
@@ -45,8 +45,8 @@ class RouteListPresenter extends Presenter {
     }));
 
     const destinations = this.model.getDestinations().map((it) => ({
-      ...it,//копирует
-      isSelected: it.id === point.destinationId//добавляет свойство
+      ...it,
+      isSelected: it.id === point.destinationId
     }));
 
     const group = offerGroups.find((it) => it.type === point.type);
@@ -87,12 +87,12 @@ class RouteListPresenter extends Presenter {
   serializePointViewState(point) {
     return {
       id: point.id,
-      type: point.types.find((it) => it.isSelected).value,//find вернет один элемент
+      type: point.types.find((it) => it.isSelected).value,
       destinationId: point.destinations.find((it) => it.isSelected)?.id,
       startDateTime: point.startDateTime,
       endDateTime: point.endDateTime,
       basePrice: point.basePrice,
-      offerIds: point.offers.filter((it) => it.isSelected).map((it) => it.id),//filter вернет все элементы
+      offerIds: point.offers.filter((it) => it.isSelected).map((it) => it.id),
       isFavorite: point.isFavorite
     };
   }
@@ -117,6 +117,7 @@ class RouteListPresenter extends Presenter {
      * @type {UrlParams}
      */
     const urlParams = this.getUrlParams();
+
     urlParams.edit = event.target.state.id;
     this.setUrlParams(urlParams);
   }
@@ -126,6 +127,7 @@ class RouteListPresenter extends Presenter {
      * @type {UrlParams}
      */
     const urlParams = this.getUrlParams();
+
     delete urlParams.edit;
     this.setUrlParams(urlParams);
   }
@@ -136,6 +138,7 @@ class RouteListPresenter extends Presenter {
   async handleFavoriteView(event) {
     const card = event.target;
     const point = card.state;
+
     try {
       point.isFavorite = !point.isFavorite;//инверсия
       await this.model.updatePoint(this.serializePointViewState(point));
@@ -147,7 +150,6 @@ class RouteListPresenter extends Presenter {
   }
 
   /**
-   *
    * @param {CustomEvent<HTMLInputElement> & {target: EditorView}} event
    */
   handleEditView(event) {
@@ -202,6 +204,7 @@ class RouteListPresenter extends Presenter {
   async handleSaveView(event) {
     const editor = event.target;
     const point = editor.state;
+
     try {
       event.preventDefault();
       point.isSaving = true;

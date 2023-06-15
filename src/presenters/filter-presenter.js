@@ -24,6 +24,7 @@ class FilterPresenter extends Presenter {
       isSelected: it === filter,
       isDisabled: this.model.getPoints({filter: it}).length === 0
     }));
+    
     return {items};
   }
 

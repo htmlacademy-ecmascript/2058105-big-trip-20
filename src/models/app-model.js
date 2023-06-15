@@ -59,7 +59,8 @@ class AppModel extends Model {
         this.#apiService.getDestinations(),
         this.#apiService.getOfferGroups()
       ]);
-      const [points, destinations, offerGroups] = data; //деструктурируем
+      //деструктурируем
+      const [points, destinations, offerGroups] = data;
 
       this.#points = points;
       this.#destinations = destinations;
@@ -80,6 +81,7 @@ class AppModel extends Model {
     const adaptedPoints = this.#points.map(AppModel.adaptPointForUser);
     const filterCallback = this.#filterCallbackMap[criteria.filter] ?? this.#filterCallbackMap.everything;
     const sortCallback = this.#sortCallbackMap[criteria.sort] ?? this.#sortCallbackMap.day;
+
     return adaptedPoints.filter(filterCallback).sort(sortCallback);
   }
 
@@ -89,8 +91,10 @@ class AppModel extends Model {
   async addPoint(point) {
     try {
       this.notify('busy');
+
       const adaptedPoint = AppModel.adaptPointForServer(point);
       const addedPoint = await this.#apiService.addPoint(adaptedPoint);
+
       this.#points.push(addedPoint);
       this.notify('change');
 
@@ -105,9 +109,11 @@ class AppModel extends Model {
   async updatePoint(point) {
     try {
       this.notify('busy');
+
       const adaptedPoint = AppModel.adaptPointForServer(point);
       const updatedPoint = await this.#apiService.updatePoint(adaptedPoint);
       const index = this.#points.findIndex((it) => it.id === updatedPoint.id);
+
       this.#points.splice(index, 1, updatedPoint);
       this.notify('change');
 
@@ -123,7 +129,9 @@ class AppModel extends Model {
     try {
       this.notify('busy');
       await this.#apiService.deletePoint(id);
+
       const index = this.#points.findIndex((it) => it.id === id);
+
       this.#points.splice(index, 1);
       this.notify('change');
 

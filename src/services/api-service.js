@@ -9,12 +9,12 @@ class ApiService extends Service {
       baseUrl: 'https://20.ecmascript.pages.academy/big-trip/',
       minResponseTime: 500,
       authorization: '',
-      ...options //оставляет возможность переопределить настройки по умолчанию
+      ...options
     });
   }
 
   /**
-   * @return{Promise<Array<PointInSnakeCase>>}
+   * @return {Promise<Array<PointInSnakeCase>>}
    */
   async getPoints() {
     const response = await this.request('points');
@@ -61,7 +61,7 @@ class ApiService extends Service {
   }
 
   /**
-   * @return{Promise<Array<Destination>>}
+   * @return {Promise<Array<Destination>>}
    */
   async getDestinations() {
     const response = await this.request('destinations');
@@ -70,7 +70,7 @@ class ApiService extends Service {
   }
 
   /**
-   * @return{Promise<Array<OfferGroup>>}
+   * @return {Promise<Array<OfferGroup>>}
    */
   async getOfferGroups() {
     const response = await this.request('offers');

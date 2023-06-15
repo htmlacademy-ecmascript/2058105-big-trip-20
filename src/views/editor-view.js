@@ -3,7 +3,7 @@ import {createDatePickers, html} from '../utils.js';
 
 /**
  * @extends {View<PointViewState>}
- * @implements {EventListenerObject} объект сам выступает в качестве об.событий, сохраняя контекст
+ * @implements {EventListenerObject}
  */
 class EditorView extends View {
   /**

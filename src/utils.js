@@ -72,7 +72,7 @@ function formatDuration(startDateTime, endDateTime) {
 /**
  * @param {HTMLInputElement} startDateField
  * @param {HTMLInputElement} endDateField
- * @return {() => void}//после вызова функции flatpickr удаляется и функция ничего не возвращает
+ * @return {() => void}
  */
 function createDatePickers(startDateField, endDateField) {
   /**настройка опций календаря
@@ -96,6 +96,7 @@ function createDatePickers(startDateField, endDateField) {
   startDateFlatpickr.set('onChange', (dates) => endDateFlatpickr.set('minDate', dates.at(0)));
   endDateFlatpickr.set('minDate', startDateFlatpickr.selectedDates.at(0));
 
+  //после вызова функции flatpickr удаляется и функция ничего не возвращает
   return () => {
     startDateFlatpickr.destroy();
     endDateFlatpickr.destroy();
